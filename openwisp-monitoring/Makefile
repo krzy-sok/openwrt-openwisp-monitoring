@@ -16,7 +16,7 @@ PKG_CONFIG_DEPENDS:=CONFIG_NETJSON_MONITORING_IWINFO
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/openwisp-monitoring
+define Package/openwisp-monitoring-mod
 	TITLE:=OpenWISP Monitoring agent MOD
 	CATEGORY:=Examples
 	SECTION:=examples
@@ -44,7 +44,7 @@ endef
 define Build/Compile
 endef
 
-define Package/openwisp-monitoring/conffiles
+define Package/openwisp-monitoring-mod/conffiles
 /etc/config/openwisp-monitoring
 endef
 
@@ -99,7 +99,7 @@ endif
 	$(CP) ../VERSION $(1)/usr/lib/openwisp-monitoring/
 endef
 
-define Package/openwisp-monitoring/install
+define Package/openwisp-monitoring-mod/install
 	$(INSTALL_DIR) \
 		$(1)/usr/sbin \
 		$(1)/etc/init.d \
@@ -125,5 +125,5 @@ define Package/openwisp-monitoring/install
 
 endef
 
-$(eval $(call BuildPackage,openwisp-monitoring))
+$(eval $(call BuildPackage,openwisp-monitoring-mod))
 $(eval $(call BuildPackage,netjson-monitoring))
