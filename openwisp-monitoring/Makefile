@@ -5,7 +5,7 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=openwisp-monitoring
+PKG_NAME:=openwisp-monitoring-mod
 PKG_VERSION:=$(shell cat ../VERSION)
 PKG_RELEASE:=1
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)/$(PKG_SOURCE_SUBDIR)
@@ -17,9 +17,9 @@ PKG_CONFIG_DEPENDS:=CONFIG_NETJSON_MONITORING_IWINFO
 include $(INCLUDE_DIR)/package.mk
 
 define Package/openwisp-monitoring
-	TITLE:=OpenWISP Monitoring agent
-	CATEGORY:=Administration
-	SECTION:=admin
+	TITLE:=OpenWISP Monitoring agent MOD
+	CATEGORY:=Examples
+	SECTION:=examples
 	SUBMENU:=openwisp
 	DEPENDS:=+netjson-monitoring +openwisp-config
 	PKGARCH:=all
@@ -28,8 +28,8 @@ endef
 
 define Package/netjson-monitoring
 	TITLE:=NetJSON Monitoring
-	CATEGORY:=Administration
-	SECTION:=admin
+	CATEGORY:=Examples
+	SECTION:=examples
 	SUBMENU:=openwisp
 	DEPENDS:=+libubus-lua +lua-cjson +rpcd
 	DEPENDS+=+NETJSON_MONITORING_IWINFO:rpcd-mod-iwinfo
