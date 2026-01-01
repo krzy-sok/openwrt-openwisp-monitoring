@@ -81,7 +81,7 @@ collect_probe_data() {
 	[ "$VERBOSE_MODE" -eq "1" ] && logger -s "Collecting sniffer detection probe data." \
 		-p daemon.info
 	until [ "$n" -ge 5 ]; do
-		pinger_pkg
+		pinger_pkg && break
 		if [ "$n" -eq 5 ]; then
 			[ "$VERBOSE_MODE" -eq "1" ] && logger -s "Collecting probe data failed!" -p daemon.err
 		fi
@@ -96,7 +96,7 @@ combine_data() {
         probe_data="$2"
         jlen=$((${#netjson}-1))
         json=`echo "$netjson"| cut -c -"$jlen"`
-        echo "$json", "$2"}
+        echo "$json", "$probe_data"}
 }
 
 set_url_and_curl() {
