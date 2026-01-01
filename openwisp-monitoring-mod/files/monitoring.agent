@@ -76,6 +76,29 @@ collect_data() {
 	done
 }
 
+collect_probe_data() {
+	n=0
+	[ "$VERBOSE_MODE" -eq "1" ] && logger -s "Collecting sniffer detection probe data." \
+		-p daemon.info
+	until [ "$n" -ge 5 ]; do
+		pinger_pkg
+		if [ "$n" -eq 5 ]; then
+			[ "$VERBOSE_MODE" -eq "1" ] && logger -s "Collecting probe data failed!" -p daemon.err
+		fi
+		n=$((n + 1))
+		sleep 5
+	done
+}
+
+
+combine_data() {
+        netjson="$1"
+        probe_data="$2"
+        jlen=$((${#netjson}-1))
+        json=`echo "$netjson"| cut -c -"$jlen"`
+        echo "$json", "$2"}
+}
+
 set_url_and_curl() {
 	[ -z "$BASE_URL" ] && echoerr "missing required --url option"
 
@@ -100,6 +123,9 @@ save_data() {
 	while true; do
 		if check_available_memory; then
 			data="$(collect_data)"
+			# if probe
+			probe_data="$(collect_probe_data)"
+			data="$(combine_data "$data" "$probe_data")"
 			filename="$(date -u +'%d-%m-%Y_%H:%M:%S')"
 			# save data with file_name
 			echo "$data" >"$TMP_DIR/$filename"
@@ -328,6 +354,10 @@ main() {
 				export BOOTUP_DELAY="$2"
 				shift
 				;;
+			# --detect_sniffers)
+			# 	export DETECT_SNIFFERS="$2"
+			# 	shift
+			# 	;;
 			-*)
 				echo "Invalid option: $1"
 				exit 1
