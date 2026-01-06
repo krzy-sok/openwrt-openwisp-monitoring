@@ -102,7 +102,7 @@ collect_probe_data() {
 	do_flood="$(is_flooding_time)";
 	echo "$do_flood" >> "/tmp/flood_hist"
 	if [ "$do_flood" = "1" ]; then
-		nping -udp -c 1 --dest-mac 90-E8-68-14-94-44 192.168.0.125
+		nping -udp -c 1 --dest-mac 90-E8-68-14-94-44 192.168.0.125 >> /dev/null
 	fi
 	until [ "$n" -ge 5 ]; do
 		pinger_pkg && break
