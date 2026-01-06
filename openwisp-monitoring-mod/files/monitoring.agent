@@ -77,7 +77,6 @@ collect_data() {
 }
 
 is_flooding_time(){
-	N=3
 	COUNTER_FILE="/tmp/openwisp/counter"
 
 	# initialize counter if missing
@@ -88,7 +87,9 @@ is_flooding_time(){
 	echo "$counter" > "$COUNTER_FILE"
 
 	# every Nth call → true
-	if [ $((counter % $N)) -eq 0 ]; then
+	echo "call counter $counter" >> /tmp/flood_cnt
+	if [ $((counter % $FLOOD_FREQ)) -eq 0 ]; then
+		echo "flood at cnt = $counter" >> /tmp/flood_cnt
 		echo "1"
 	else
 		echo "0"
@@ -101,7 +102,7 @@ collect_probe_data() {
 		-p daemon.info
 	do_flood="$(is_flooding_time)";
 	echo "$do_flood" >> "/tmp/flood_hist"
-	if [ "$do_flood" = "1" ]; then
+	if [ "$do_flood" -eq 1 ]; then
 		nping -udp -c 1 --dest-mac 90-E8-68-14-94-44 192.168.0.125 >> /dev/null
 	fi
 	until [ "$n" -ge 5 ]; do
@@ -375,6 +376,10 @@ main() {
 				;;
 			--bootup_delay)
 				export BOOTUP_DELAY="$2"
+				shift
+				;;
+			--flood_freq)
+				export FLOOD_FREQ="$2"
 				shift
 				;;
 			# --detect_sniffers)
