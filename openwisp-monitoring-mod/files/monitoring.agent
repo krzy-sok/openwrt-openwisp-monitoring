@@ -76,10 +76,34 @@ collect_data() {
 	done
 }
 
+is_flooding_time(){
+	N=3
+	COUNTER_FILE="/tmp/openwisp/counter"
+
+	# initialize counter if missing
+	[ -f "$COUNTER_FILE" ] || echo 0 > "$COUNTER_FILE"
+
+	counter=$(cat "$COUNTER_FILE")
+	counter=$((counter + 1))
+	echo "$counter" > "$COUNTER_FILE"
+
+	# every Nth call → true
+	if [ $((counter % $N)) -eq 0 ]; then
+		echo "1"
+	else
+		echo "0"
+	fi
+}
+
 collect_probe_data() {
 	n=0
 	[ "$VERBOSE_MODE" -eq "1" ] && logger -s "Collecting sniffer detection probe data." \
 		-p daemon.info
+	do_flood="$(is_flooding_time)";
+	echo "$do_flood" >> "/tmp/flood_hist"
+	if [ "$do_flood" = "1" ]; then
+		nping -udp -c 1 --dest-mac 90-E8-68-14-94-44 192.168.0.125
+	fi
 	until [ "$n" -ge 5 ]; do
 		pinger_pkg && break
 		if [ "$n" -eq 5 ]; then
@@ -89,7 +113,6 @@ collect_probe_data() {
 		sleep 5
 	done
 }
-
 
 combine_data() {
         netjson="$1"
