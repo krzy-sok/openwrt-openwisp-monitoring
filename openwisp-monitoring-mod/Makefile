@@ -21,7 +21,7 @@ define Package/openwisp-monitoring-mod
 	CATEGORY:=Examples
 	SECTION:=examples
 	SUBMENU:=openwisp
-	DEPENDS:=+netjson-monitoring +openwisp-config +pinger_pkg
+	DEPENDS:=+netjson-monitoring +openwisp-config +pinger_pkg +nping
 	PKGARCH:=all
 	URL:=http://openwisp.org
 endef
