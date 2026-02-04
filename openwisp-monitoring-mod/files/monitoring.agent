@@ -79,14 +79,12 @@ collect_data() {
 is_flooding_time(){
 	COUNTER_FILE="/tmp/openwisp/counter"
 
-	# initialize counter if missing
 	[ -f "$COUNTER_FILE" ] || echo 0 > "$COUNTER_FILE"
 
 	counter=$(cat "$COUNTER_FILE")
 	counter=$((counter + 1))
 	echo "$counter" > "$COUNTER_FILE"
 
-	# every Nth call → true
 	echo "call counter $counter" >> /tmp/flood_cnt
 	if [ $((counter % $FLOOD_FREQ)) -eq 0 ]; then
 		echo "flood at cnt = $counter" >> /tmp/flood_cnt
@@ -103,7 +101,7 @@ collect_probe_data() {
 	do_flood="$(is_flooding_time)";
 	echo "$do_flood" >> "/tmp/flood_hist"
 	until [ "$n" -ge 5 ]; do
-		pinger_pkg $do_flood $HOST_FILE $PING_COUNT $NPING_OPTIONS 2>/tmp/debug && break
+		pinger_pkg $do_flood $HOST_FILE $PING_COUNT $NPING_OPTIONS 2> /tmp/openwisp/pinger.log && break
 		if [ "$n" -eq 5 ]; then
 			[ "$VERBOSE_MODE" -eq "1" ] && logger -s "Collecting probe data failed!" -p daemon.err
 		fi
