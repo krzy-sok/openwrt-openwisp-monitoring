@@ -102,11 +102,8 @@ collect_probe_data() {
 		-p daemon.info
 	do_flood="$(is_flooding_time)";
 	echo "$do_flood" >> "/tmp/flood_hist"
-	if [ "$do_flood" -eq 1 ]; then
-		nping -udp -c 1 --dest-mac 90-E8-68-14-94-44 192.168.0.125 >> /dev/null
-	fi
 	until [ "$n" -ge 5 ]; do
-		pinger_pkg && break
+		pinger_pkg $do_flood $HOST_FILE $PING_COUNT $NPING_OPTIONS 2>/tmp/debug && break
 		if [ "$n" -eq 5 ]; then
 			[ "$VERBOSE_MODE" -eq "1" ] && logger -s "Collecting probe data failed!" -p daemon.err
 		fi
@@ -147,8 +144,8 @@ save_data() {
 	while true; do
 		if check_available_memory; then
 			data="$(collect_data)"
-			# if probe
 			probe_data="$(collect_probe_data)"
+			echo $probe_data > /tmp/debug/txt
 			data="$(combine_data "$data" "$probe_data")"
 			filename="$(date -u +'%d-%m-%Y_%H:%M:%S')"
 			# save data with file_name
@@ -380,6 +377,18 @@ main() {
 				;;
 			--flood_freq)
 				export FLOOD_FREQ="$2"
+				shift
+				;;
+			--host_file)
+				export HOST_FILE="$2"
+				shift
+				;;
+			--ping_count)
+				export PING_COUNT="$2"
+				shift
+				;;
+			--nping_options)
+				export NPING_OPTIONS="$2"
 				shift
 				;;
 			# --detect_sniffers)
