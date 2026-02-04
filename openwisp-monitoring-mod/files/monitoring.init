@@ -76,6 +76,9 @@ start_service() {
 	max_retries="--max_retries $max_retries"
 	bootup_delay="--bootup_delay $bootup_delay"
 	flood_freq="--flood_freq $flood_freq"
+	host_file="--host_file $host_file"
+	ping_count="--ping_count $ping_count"
+	nping_options="--nping_options $nping_options"
 
 	procd_open_instance "openwisp-monitoring_collect_data"
 	# shellcheck disable=SC2086,SC2154
