@@ -143,8 +143,10 @@ save_data() {
 	while true; do
 		if check_available_memory; then
 			data="$(collect_data)"
-			probe_data="$(collect_probe_data)"
-			data="$(combine_data "$data" "$probe_data")"
+			if ANITISNIFF ; then
+				probe_data="$(collect_probe_data)"
+				data="$(combine_data "$data" "$probe_data")"
+			fi
 			filename="$(date -u +'%d-%m-%Y_%H:%M:%S')"
 			# save data with file_name
 			echo "$data" >"$TMP_DIR/$filename"
@@ -389,10 +391,10 @@ main() {
 				export NPING_OPTIONS="$2"
 				shift
 				;;
-			# --detect_sniffers)
-			# 	export DETECT_SNIFFERS="$2"
-			# 	shift
-			# 	;;
+			--antisniffing_enabled)
+				export ANITISNIFF="$2"
+				shift
+				;;
 			-*)
 				echo "Invalid option: $1"
 				exit 1
