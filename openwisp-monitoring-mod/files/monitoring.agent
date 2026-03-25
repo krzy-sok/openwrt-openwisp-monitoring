@@ -143,7 +143,7 @@ save_data() {
 	while true; do
 		if check_available_memory; then
 			data="$(collect_data)"
-			if ANITISNIFF ; then
+			if ["$ANITISNIFF" != "0" ] ; then
 				probe_data="$(collect_probe_data)"
 				data="$(combine_data "$data" "$probe_data")"
 			fi
