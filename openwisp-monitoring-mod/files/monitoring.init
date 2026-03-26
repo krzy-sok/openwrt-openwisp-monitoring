@@ -83,7 +83,7 @@ start_service() {
 	if [ -n "$nping_options" ]; then
 		nping_options="--nping_options \"$nping_options\""
 	fi
-
+    echo $PROG $interval $verbose $required_memory $flood_freq $host_file $ping_count $nping_options $antisniffing_enabled --mode collect --monitored_interfaces "$monitored_interfaces" > /tmp/openwisp/start.log
 	procd_open_instance "openwisp-monitoring_collect_data"
 	# shellcheck disable=SC2086,SC2154
 	procd_set_param command $PROG $interval $verbose $required_memory $flood_freq $host_file $ping_count $nping_options $antisniffing_enabled --mode collect --monitored_interfaces "$monitored_interfaces"
