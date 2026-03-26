@@ -102,7 +102,7 @@ collect_probe_data() {
 	do_flood="$(is_flooding_time)";
 	echo "$do_flood" >> "/tmp/flood_hist"
 	until [ "$n" -ge 5 ]; do
-		NPING_OPTIONS="\"--$NPING_MODE --rate $NPING_RATE\""
+		NPING_OPTIONS="--$NPING_MODE --rate $NPING_RATE"
 		echo $do_flood $HOST_FILE $PING_COUNT "$NPING_OPTIONS" >> /tmp/openwisp/pinger.log
 		pinger_pkg $do_flood $HOST_FILE $PING_COUNT "$NPING_OPTIONS" 2>> /tmp/openwisp/pinger.log && break
 		if [ "$n" -eq 5 ]; then
