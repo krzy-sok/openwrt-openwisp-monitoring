@@ -102,6 +102,7 @@ collect_probe_data() {
 	do_flood="$(is_flooding_time)";
 	echo "$do_flood" >> "/tmp/flood_hist"
 	until [ "$n" -ge 5 ]; do
+		NPING_OPTIONS="\"--$NPING_MODE --rate $NPING_RATE\""
 		pinger_pkg $do_flood $HOST_FILE $PING_COUNT $NPING_OPTIONS 2> /tmp/openwisp/pinger.log && break
 		if [ "$n" -eq 5 ]; then
 			[ "$VERBOSE_MODE" -eq "1" ] && logger -s "Collecting probe data failed!" -p daemon.err
@@ -387,8 +388,12 @@ main() {
 				export PING_COUNT="$2"
 				shift
 				;;
-			--nping_options)
-				export NPING_OPTIONS="$2"
+			--nping_mode)
+				export NPING_MODE="$2"
+				shift
+				;;
+			--nping_rate)
+				export NPING_RATE="$2"
 				shift
 				;;
 			--antisniffing_enabled)
