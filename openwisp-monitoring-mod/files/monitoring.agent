@@ -409,7 +409,7 @@ main() {
 				export CURL_PATH="$2"
 				shift
 				;;
-			-curl_port)
+			--curl_port)
 				export CURL_PORT="$2"
 				shift
 				;;
