@@ -64,6 +64,9 @@ start_service() {
 	config_get nping_rate monitoring nping_rate "1000"
 	config_get nping_mode monitoring nping_mode "tcp"
 	config_get antisniffing_enabled monitoring antisniffing_enabled "1"
+	config_get curl_mode monitoring curl_mode "0"
+	config_get curl_path monitoring url_pat "/test.txt"
+	config_get curl_port monitoring curl_port "5071"
 
 	interval="$(time_to_seconds "$interval")"
 	if [ "$interval" -lt 1 ]; then
@@ -83,8 +86,11 @@ start_service() {
 	antisniffing_enabled="--antisniffing_enabled $antisniffing_enabled"
 	nping_rate="--nping_rate $nping_rate"
 	nping_mode="--nping_mode $nping_mode"
+	curl_mode="--curl_mode $curl_mode"
+	curl_path="--curl_path $curl_path"
+	curl_port="--curl_port $curl_port"
 
-    echo $PROG $interval $verbose $required_memory $flood_freq $host_file $ping_count $nping_rate $nping_mode $antisniffing_enabled --mode collect --monitored_interfaces "$monitored_interfaces" > /tmp/openwisp/start.log
+    echo $PROG $interval $verbose $required_memory $flood_freq $host_file $ping_count $nping_rate $nping_mode $antisniffing_enabled $curl_mode $curl_path $curl_port --mode collect --monitored_interfaces "$monitored_interfaces" > /tmp/openwisp/start.log
 	procd_open_instance "openwisp-monitoring_collect_data"
 	# shellcheck disable=SC2086,SC2154
 	procd_set_param command $PROG $interval $verbose $required_memory $flood_freq $host_file $ping_count $nping_rate $nping_mode $antisniffing_enabled --mode collect --monitored_interfaces "$monitored_interfaces"
