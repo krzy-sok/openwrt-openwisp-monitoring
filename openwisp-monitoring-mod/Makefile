@@ -5,7 +5,7 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=openwisp-monitoring
+PKG_NAME:=openwisp-monitoring-mod
 PKG_VERSION:=$(shell cat ../VERSION)
 PKG_RELEASE:=1
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)/$(PKG_SOURCE_SUBDIR)
@@ -16,20 +16,20 @@ PKG_CONFIG_DEPENDS:=CONFIG_NETJSON_MONITORING_IWINFO
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/openwisp-monitoring
-	TITLE:=OpenWISP Monitoring agent
-	CATEGORY:=Administration
-	SECTION:=admin
+define Package/openwisp-monitoring-mod
+	TITLE:=OpenWISP Monitoring agent MOD
+	CATEGORY:=Examples
+	SECTION:=examples
 	SUBMENU:=openwisp
-	DEPENDS:=+netjson-monitoring +openwisp-config
+	DEPENDS:=+netjson-monitoring +openwisp-config +pinger_pkg
 	PKGARCH:=all
 	URL:=http://openwisp.org
 endef
 
 define Package/netjson-monitoring
 	TITLE:=NetJSON Monitoring
-	CATEGORY:=Administration
-	SECTION:=admin
+	CATEGORY:=Examples
+	SECTION:=examples
 	SUBMENU:=openwisp
 	DEPENDS:=+libubus-lua +lua-cjson +rpcd
 	DEPENDS+=+NETJSON_MONITORING_IWINFO:rpcd-mod-iwinfo
@@ -44,7 +44,7 @@ endef
 define Build/Compile
 endef
 
-define Package/openwisp-monitoring/conffiles
+define Package/openwisp-monitoring-mod/conffiles
 /etc/config/openwisp-monitoring
 endef
 
@@ -99,7 +99,7 @@ endif
 	$(CP) ../VERSION $(1)/usr/lib/openwisp-monitoring/
 endef
 
-define Package/openwisp-monitoring/install
+define Package/openwisp-monitoring-mod/install
 	$(INSTALL_DIR) \
 		$(1)/usr/sbin \
 		$(1)/etc/init.d \
@@ -125,5 +125,5 @@ define Package/openwisp-monitoring/install
 
 endef
 
-$(eval $(call BuildPackage,openwisp-monitoring))
+$(eval $(call BuildPackage,openwisp-monitoring-mod))
 $(eval $(call BuildPackage,netjson-monitoring))
